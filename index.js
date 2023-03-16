@@ -10,7 +10,16 @@ app.use(cors());
 
 //method, 경로설정 (요청,응답)
 app.get("/products", (req, res) => {
-  models.Product.findAll()
+  models.Product.findAll({
+    order: [["createdAt", "ASC"]],
+    attributes: ["id", "name", "price", "seller", "imageUrl", "createdAt"],
+
+    // order: [["createdAt", "DESC"]],
+    //'참조컬럼','ASC'||'DESC'
+    //'ASC'-오름차순 // 'DESC'-내림차순
+
+    // limit: 1(조회 결과값을 조정할 수 있다. 로딩속도 개선에 좋음.)
+  })
     .then((result) => {
       console.log("product 조회결과:", result);
       res.send({ products: result });
@@ -21,11 +30,23 @@ app.get("/products", (req, res) => {
     });
 });
 
-app.get("/products/:id/events/:eventId", (req, res) => {
+app.get("/products/:id", (req, res) => {
   const params = req.params;
   // const id=params.id;
-  const { id, eventId } = params;
-  res.send(`id는 ${id}이고 eventId는 ${eventId}입니다`);
+  const { id } = params;
+  models.Product.findOne({
+    where: { id: id },
+  })
+    .then((result) => {
+      console.log("조회결과:", result);
+      res.send({
+        product: result,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send("상품조회시 에러가 발생 했습니다.");
+    });
 });
 
 //상품생성데이터를 데이터 베이스 추가
