@@ -4,9 +4,21 @@ const cors = require("cors");
 const app = express();
 const port = 8080;
 const models = require("./models");
+const multer = require("multer");
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    },
+  }),
+});
 //json 형식의 데이터를 처리할 수 있게 설정
 app.use(express.json());
 app.use(cors());
+app.use("/uploads", express.static("uploads"));
 
 //method, 경로설정 (요청,응답)
 app.get("/products", (req, res) => {
@@ -47,6 +59,14 @@ app.get("/products/:id", (req, res) => {
       console.error(error);
       res.send("상품조회시 에러가 발생 했습니다.");
     });
+});
+
+app.post("/image", upload.single("image"), (req, res) => {
+  const file = req.file;
+  console.log(file);
+  res.send({
+    imageUrl: file.path,
+  });
 });
 
 //상품생성데이터를 데이터 베이스 추가
