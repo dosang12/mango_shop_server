@@ -23,7 +23,7 @@ app.use("/uploads", express.static("uploads"));
 //method, 경로설정 (요청,응답)
 app.get("/products", (req, res) => {
   models.Product.findAll({
-    order: [["createdAt", "ASC"]],
+    order: [["createdAt", "DESC"]],
     attributes: ["id", "name", "price", "seller", "imageUrl", "createdAt"],
 
     // order: [["createdAt", "DESC"]],
