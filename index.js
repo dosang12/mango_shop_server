@@ -61,7 +61,7 @@ app.get("/products/:id", (req, res) => {
     });
 });
 
-app.post("/image", upload.single("image"), (req, res) => {
+app.post("/imageUrl", upload.single("imageUrl"), (req, res) => {
   const file = req.file;
   console.log(file);
   res.send({
@@ -73,7 +73,7 @@ app.post("/image", upload.single("image"), (req, res) => {
 app.post("/products", (req, res) => {
   const body = req.body;
   //1. 디스트럭처링으로 상수 body 의 값을 개별적으로 할당한다
-  const { name, description, price, seller } = body;
+  const { name, description, price, seller, imageUrl } = body;
   if (!name || !description || !price || !seller) {
     res.send("모든 필드를 입력해주세요");
   }
@@ -83,6 +83,7 @@ app.post("/products", (req, res) => {
     description,
     price,
     seller,
+    imageUrl,
   })
     //3. 데이터를 다루는 것은 기본적으로 비동기 통신을 지원하므로 promise 객체 활용
     .then((result) => {
