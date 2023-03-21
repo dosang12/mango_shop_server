@@ -5,7 +5,7 @@ const multer = require("multer");
 const { response } = require("express");
 
 const app = express();
-const port = "https://port-0-mango-shop-server2-p8xrq2mlfg43w7v.sel3.cloudtype.app/";
+const port = process.env.PORT || 8080;
 
 const upload = multer({
   storage: multer.diskStorage({
